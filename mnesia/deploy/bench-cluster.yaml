@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mnesia-bench
+  namespace: hypermnesia
+spec:
+  template:
+    spec:
+      containers:
+        - command:
+          - erl
+          - -noshell
+          - -setcookie
+          - $(CLUSTER_ERLANG_COOKIE)
+          - -pa
+          - .
+          - -name
+          - $(ERLANG_NODENAME)
+          - -eval
+          - 'io:format("~p~n", [node()]), bench:run(), erlang:halt().'
+          name: mnesia-bench
+          image: cuso4/mnesia-bench
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4369
+              name: epmd
+          env:
+            - name: ERLANG_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: ERLANG_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: ERLANG_NODENAME
+              value: bench0@$(ERLANG_POD_NAME)
+            - name: CLUSTER_ERLANG_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  name: erl-cluster-secret
+                  key: ERLANG_COOKIE
+      restartPolicy: Never
+  backoffLimit: 1

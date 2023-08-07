@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: erl-cluster-secret
+  namespace: hypermnesia
+type: Opaque
+data:
+  # echo -n "cookie-value" | base64
+  ERLANG_COOKIE: YmVuY2hfY29va2ll
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: erl-cluster-svc
+  namespace: hypermnesia
+  labels:
+    app: erl-cluster
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: erl-cluster
+  ports:
+  - port: 4369
+    name: epmd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: erl-cluster
+  namespace: hypermnesia
+spec:
+  selector:
+    matchLabels:
+      app: erl-cluster
+  serviceName: erl-cluster-svc
+  podManagementPolicy: Parallel
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: erl-cluster
+    spec:
+      containers:
+      - command:
+        - erl
+        - -noshell
+        - -setcookie
+        - $(CLUSTER_ERLANG_COOKIE)
+        - -name
+        - $(ERLANG_NODENAME)
+        - -pa
+        - .
+        - -eval
+        - 'io:format("node~p cookie ~p files ~p ~n", [node(), erlang:get_cookie(), file:list_dir(".")])'
+        name: mnesia-bench
+        image: erlang
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4369
+          name: epmd
+        env:
+        - name: ERLANG_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: ERLANG_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: ERLANG_NODENAME
+          value: bench@$(ERLANG_POD_NAME).erl-cluster-svc.$(ERLANG_POD_NAMESPACE).svc.cluster.local
+        - name: CLUSTER_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: erl-cluster-secret
+              key: ERLANG_COOKIE
