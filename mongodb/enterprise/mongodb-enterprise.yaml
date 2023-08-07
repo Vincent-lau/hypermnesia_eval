@@ -1,0 +1,21 @@
+---
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: mongodb-enterprise
+spec:
+  security:
+    authentication: 
+      enabled: false
+      # modes: ["SCRAM"]
+  members: 3
+  version: "4.2.2-ent"
+  opsManager:
+    configMapRef:
+           # Must match metadata.name in ConfigMap file
+      name: om-configmap
+  credentials: organization-secret
+  type: ReplicaSet
+  persistent: false
+  additionalMongodConfig:
+    storage.engine: inMemory

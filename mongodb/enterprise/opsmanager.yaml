@@ -1,0 +1,75 @@
+---
+apiVersion: mongodb.com/v1
+kind: MongoDBOpsManager
+metadata:
+  name: om
+spec:
+  replicas: 1
+  version: 6.0.0
+  adminCredentials: om-admin-secret # Should match metadata.name
+                                           # in the secret
+                                           # for the admin user
+  externalConnectivity:
+    type: LoadBalancer
+
+  applicationDatabase:
+    members: 3
+    version: 6.0.5-ubi8
+  backup:
+    enabled: false
+---
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: om-volume-0
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 16G
+      hostPath:
+        path: /opt/data/om-data-0
+        type: ""
+      persistentVolumeReclaimPolicy: Retain
+      # storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: om-volume-1
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 16G
+      hostPath:
+        path: /opt/data/om-data-1
+        type: ""
+      persistentVolumeReclaimPolicy: Retain
+      # storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: om-volume-2
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 16G
+      hostPath:
+        path: /opt/data/om-data-2
+        type: ""
+      persistentVolumeReclaimPolicy: Retain
+      # storageClassName: default
+      volumeMode: Filesystem
+kind: List
+---

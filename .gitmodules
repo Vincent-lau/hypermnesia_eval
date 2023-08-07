@@ -1,0 +1,3 @@
+[submodule "hypermnesia"]
+	path = hypermnesia
+	url = git@github.com:Vincent-lau/hypermnesia.git

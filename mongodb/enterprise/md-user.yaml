@@ -1,0 +1,33 @@
+# used to connect to mongodb with mongosh
+---
+apiVersion: mongodb.com/v1
+kind: MongoDBUser
+metadata:
+  name: mms-scram-user-1
+
+spec:
+  passwordSecretKeyRef:
+    name: mms-scram-user-1-password
+    # Match to metadata.name of the User Secret
+    key: password
+  username: mms-scram-user-1
+  db: "admin" #
+  mongodbResourceRef:
+    name: mongodb-enterprise
+    # Match to MongoDB resource using authenticaiton
+  roles:
+    - db: "admin"
+
+      name: "clusterAdmin"
+
+    - db: "admin"
+
+      name: "userAdminAnyDatabase"
+
+    - db: "admin"
+
+      name: "readWrite"
+
+    - db: "admin"
+
+      name: "userAdminAnyDatabase"

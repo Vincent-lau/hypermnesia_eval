@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  namespace: mongodb
+spec:
+  containers:
+  - image: mongo
+    command:
+      - sleep
+      - "36000"
+    imagePullPolicy: IfNotPresent
+    name: test-pod
+    env:
+    - name: "CONNECTION_STRING"
+      valueFrom:
+        secretKeyRef:
+          name: mongodb-enterprise-mms-scram-user-1-admin
+          key: connectionString.standard
+  restartPolicy: Always

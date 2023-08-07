@@ -1,0 +1,20 @@
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: om-bk-volume-0
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 32G
+      hostPath:
+        path: /opt/data/bk
+        type: ""
+      persistentVolumeReclaimPolicy: Retain
+      volumeMode: Filesystem
+kind: List
+---

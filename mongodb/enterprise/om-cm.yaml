@@ -1,0 +1,11 @@
+# for db to access om
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: om-configmap
+  namespace: mongodb
+data:
+  baseUrl: http://om-svc.mongodb.svc.cluster.local:8080
+  # Optional Parameters
+  # projectName: My Ops/Cloud Manager Project
+  orgId: 64ccd2f4690c5e748e713508
