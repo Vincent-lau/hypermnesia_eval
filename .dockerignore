@@ -1,0 +1,7 @@
+.git/
+otp/bin/
+otp/erts/
+otp/HOWTO/
+otp/plt/
+otp/system/
+otp/xcomp/
