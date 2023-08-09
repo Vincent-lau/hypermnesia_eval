@@ -52,10 +52,12 @@ spec:
         - $(ERLANG_NODENAME)
         - -pa
         - .
+        - -pa
+        - ebin/
         - -eval
-        - 'io:format("node~p cookie ~p files ~p ~n", [node(), erlang:get_cookie(), file:list_dir(".")])'
+        - 'connect:connect_peers()'
         name: mnesia-bench
-        image: erlang
+        image: cuso4/hypermnesia
         imagePullPolicy: Always
         ports:
         - containerPort: 4369

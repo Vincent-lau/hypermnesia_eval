@@ -4,5 +4,5 @@
 
 start() ->
   io:format("~p~n", [node()]), 
-  K8sServicePath = "erl-cluster-svc..svc.cluster.local",
+  % K8sServicePath = "erl-cluster-svc..svc.cluster.local",
   bench:run(["/bench/bench.config"]).

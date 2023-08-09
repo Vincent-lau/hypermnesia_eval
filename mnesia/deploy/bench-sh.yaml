@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mnesiash-pod
+  namespace: hypermnesia
+spec:
+  containers:
+  - image: cuso4/hypermnesia:latest
+    command:
+      - sleep
+      - "36000"
+    imagePullPolicy: IfNotPresent
+    name: mnesiash
+  restartPolicy: Always
