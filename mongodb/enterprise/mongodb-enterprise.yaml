@@ -8,7 +8,7 @@ spec:
     authentication: 
       enabled: false
       # modes: ["SCRAM"]
-  members: 3
+  members: 5
   version: "4.2.2-ent"
   opsManager:
     configMapRef:

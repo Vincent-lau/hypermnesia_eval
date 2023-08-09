@@ -8,4 +8,4 @@ data:
   baseUrl: http://om-svc.mongodb.svc.cluster.local:8080
   # Optional Parameters
   # projectName: My Ops/Cloud Manager Project
-  orgId: 64ccd2f4690c5e748e713508
+  orgId: 64d3939966a3243dea78a1b3

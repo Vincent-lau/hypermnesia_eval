@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-pod
+  name: mongosh-pod
   namespace: mongodb
 spec:
   containers:
-  - image: mongo
+  - image: cuso4/mongosh:latest
     command:
       - sleep
       - "36000"
