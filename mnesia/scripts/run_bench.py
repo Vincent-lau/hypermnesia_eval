@@ -6,7 +6,9 @@ import argparse
 import time
 from enum import Enum
 from termcolor import colored
+from kubernetes import client, config
 
+config.load_kube_config()
 
 # ======================== bench config ========================
 
@@ -25,7 +27,7 @@ default_params = {
     'generator_warmup': 12000,
     'generator_duration': 90000,
     'generator_cooldown': 12000,
-    'generator_nodes': table_nodes,
+    'generator_nodes': table_nodes[:1],
     'n_generators_per_node': 1,
     'table_nodes': table_nodes,
     'n_replicas': n_replicas,
@@ -60,12 +62,13 @@ def change_generators(n_replicas: int, n_generators: int) -> dict():
     else:
         generator_nodes = [table_nodes[0]]
         n_generators_per_node = 1
-    
+
     params['table_nodes'] = table_nodes
     params['generator_nodes'] = generator_nodes
     params['n_generators_per_node'] = n_generators_per_node
 
     return params
+
 
 def change_activity(activity: str) -> dict():
     params = default_params.copy()
@@ -130,14 +133,26 @@ def render_cluster_config(replicas: int):
 
 def remove(wait_time=5):
     os.system('kubectl delete -f deploy/erl-cluster.yaml --ignore-not-found')
-    print('Waiting for cluster to be deleted')
-    time.sleep(wait_time)
+    sleep(wait_time, 'cluster to be deleted')
 
+def print_nodes(log_file: str):
+    v1 = client.CoreV1Api()
+    log_file = f"logs/{log_file}"
+    pods = v1.list_namespaced_pod("hypermnesia")
+    cnt = 0
+    for p in pods.items:
+        if p.metadata.name.startswith("erl-cluster-"):
+            cnt += 1
+            with open(log_file, "a") as outfile:
+                outfile.write(f"{p.metadata.name}\n")
+    cnt -= 1 # remove enterprise operator
+    with open(log_file, "a") as outfile:
+        print(f"Total nodes: {cnt}")
+        outfile.write(f"Total nodes: {cnt}\n\n")
 
 def deploy_cluster(wait_time=30):
     os.system('kubectl apply -f deploy/erl-cluster.yaml')
-    print('Waiting for cluster to be deployed')
-    time.sleep(wait_time)
+    sleep(wait_time, 'cluster to be deployed')
 
 
 def run_in_cluster(args: argparse.Namespace):
@@ -187,17 +202,19 @@ def sleep(sleep_time: int, msg=""):
             print(colored(
                 f"Sleeping for {sleep_time - i} seconds while waiting for {msg}", "green"), end='\r', flush=True)
             time.sleep(1)
+        print()
     except KeyboardInterrupt:
+        print()
         print(colored("Keyboard interrupt detected, waking up", "red"))
 
 
 def run(args):
     # now render the corresponding cluster config, e.g. number of nodes need to match
-    render_cluster_config(replicas=3)
 
     # need to deploy the cluster now
     remove()
-    deploy_cluster(60)
+    deploy_cluster(360)
+    print_nodes(args.log)
 
     # then copy in bench.sh and bench0.config
     copyin()
@@ -220,27 +237,39 @@ def main():
                         type=str, choices=[
                             'workload', 'activity', 'nodes', 'generators', 'subscribers'],
                         required=True)
-    parser.add_argument('-bc', '--benchmark-value', help='value for benchmark',
+    parser.add_argument('-v', '--benchmark-value', help='value for benchmark',
                         nargs='+', type=int, required=True)
+    parser.add_argument('-n', '--times', type=int,
+                        default=1, help='number of times to run')
     args = parser.parse_args()
 
+    os.system('kubectl config set-context --current --namespace=hypermnesia')
+
     if args.benchmark == 'workload':
-        for i in args.benchmark_value:
+        for i in range(args.benchmark_value[0], args.benchmark_value[1]):
+            render_cluster_config(replicas=i)
             render_bench_config(Benchmark.WORKLOAD, i * 0.1)
+            run(args)
     elif args.benchmark == 'nodes':
         for i in args.benchmark_value:
+            render_cluster_config(replicas=i)
             render_bench_config(Benchmark.NODES, i, 1)
+            run(args)
     elif args.benchmark == 'generators':
-        for i in args.benchmark_value:
+        for i in range(args.benchmark_value[0], args.benchmark_value[1]):
+            render_cluster_config(replicas=i)
             render_bench_config(Benchmark.NODES, 3, i)
+            run(args)
     elif args.benchmark == 'subscribers':
-        for i in args.benchmark_value:
+        for i in range(args.benchmark_value[0], args.benchmark_value[1], 1000):
+            render_cluster_config(replicas=i)
             render_bench_config(Benchmark.SUBSCRIBERS, i)
+            run(args)
     elif args.benchmark == 'activity':
-        for i in args.benchmark_value:
+        for i in range(args.benchmark_value[0], args.benchmark_value[1]):
+            render_cluster_config(replicas=i)
             render_bench_config(Benchmark.ACTIVITY, i)
-
-    run(args)
+            run(args)
 
 
 if __name__ == "__main__":
