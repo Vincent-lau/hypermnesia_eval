@@ -1,2 +1,8 @@
 *.beam
 scratch*.txt
+
+
+
+# templated derived files
+bench0.config
+erl-cluster.yaml

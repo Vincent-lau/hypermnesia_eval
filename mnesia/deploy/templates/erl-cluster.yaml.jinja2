@@ -36,7 +36,7 @@ spec:
       app: erl-cluster
   serviceName: erl-cluster-svc
   podManagementPolicy: Parallel
-  replicas: 3
+  replicas: {{ replicas }}
   template:
     metadata:
       labels:
@@ -54,8 +54,10 @@ spec:
         - .
         - -pa
         - ebin/
+        - -pa
+        - lib/mnesia/examples/bench
         - -eval
-        - 'connect:connect_peers()'
+        - 'io:format("sleep 100000000"), timer:sleep(10000000000000).'
         name: mnesia-bench
         image: cuso4/hypermnesia
         imagePullPolicy: Always
