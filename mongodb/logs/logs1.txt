@@ -1,0 +1,41 @@
+java -cp /usr/local/ycsb-0.17.0/mongodb-binding/conf:/usr/local/ycsb-0.17.0/conf:/usr/local/ycsb-0.17.0/lib/jackson-mapper-asl-1.9.4.jar:/usr/local/ycsb-0.17.0/lib/HdrHistogram-2.1.4.jar:/usr/local/ycsb-0.17.0/lib/jackson-core-asl-1.9.4.jar:/usr/local/ycsb-0.17.0/lib/core-0.17.0.jar:/usr/local/ycsb-0.17.0/lib/htrace-core4-4.1.0-incubating.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/mongo-java-driver-3.8.0.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/logback-classic-1.1.2.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/mongodb-async-driver-2.0.1.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/snappy-java-1.1.7.1.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/logback-core-1.1.2.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/slf4j-api-1.7.25.jar:/usr/local/ycsb-0.17.0/mongodb-binding/lib/mongodb-binding-0.17.0.jar site.ycsb.Client -db site.ycsb.db.MongoDbClient -s -threads 1 -P workloads/workloada -p mongodb.url=mongodb://mongodb-enterprise-0.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017,mongodb-enterprise-1.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017,mongodb-enterprise-2.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017/?connectTimeoutMS=20000&replicaSet=mongodb-enterprise&serverSelectionTimeoutMS=20000 -t
+Command line: -db site.ycsb.db.MongoDbClient -s -threads 1 -P workloads/workloada -p mongodb.url=mongodb://mongodb-enterprise-0.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017,mongodb-enterprise-1.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017,mongodb-enterprise-2.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017/?connectTimeoutMS=20000&replicaSet=mongodb-enterprise&serverSelectionTimeoutMS=20000 -t
+YCSB Client 0.17.0
+
+Loading workload...
+Starting test.
+2023-08-17 10:13:28:288 0 sec: 0 operations; est completion in 0 second 
+mongo client connection created with mongodb://mongodb-enterprise-0.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017,mongodb-enterprise-1.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017,mongodb-enterprise-2.mongodb-enterprise-svc.mongodb.svc.cluster.local:27017/?connectTimeoutMS=20000&replicaSet=mongodb-enterprise&serverSelectionTimeoutMS=20000
+DBWrapper: report latency for each error is false and specific error codes to track for latency are: []
+2023-08-17 10:13:29:725 1 sec: 1000 operations; 680.27 current ops/sec; [READ: Count=504, Max=76543, Min=507, Avg=1098.15, 90=1239, 99=1823, 99.9=2695, 99.99=76543] [CLEANUP: Count=1, Max=7423, Min=7420, Avg=7422, 90=7423, 99=7423, 99.9=7423, 99.99=7423] [UPDATE: Count=496, Max=6875, Min=567, Avg=1068.9, 90=1352, 99=1852, 99.9=6875, 99.99=6875] 
+[OVERALL], RunTime(ms), 1470
+[OVERALL], Throughput(ops/sec), 680.2721088435375
+[TOTAL_GCS_G1_Young_Generation], Count, 0
+[TOTAL_GC_TIME_G1_Young_Generation], Time(ms), 0
+[TOTAL_GC_TIME_%_G1_Young_Generation], Time(%), 0.0
+[TOTAL_GCS_G1_Old_Generation], Count, 0
+[TOTAL_GC_TIME_G1_Old_Generation], Time(ms), 0
+[TOTAL_GC_TIME_%_G1_Old_Generation], Time(%), 0.0
+[TOTAL_GCs], Count, 0
+[TOTAL_GC_TIME], Time(ms), 0
+[TOTAL_GC_TIME_%], Time(%), 0.0
+[READ], Operations, 504
+[READ], AverageLatency(us), 1098.1507936507937
+[READ], MinLatency(us), 507
+[READ], MaxLatency(us), 76543
+[READ], 95thPercentileLatency(us), 1404
+[READ], 99thPercentileLatency(us), 1823
+[READ], Return=OK, 504
+[CLEANUP], Operations, 1
+[CLEANUP], AverageLatency(us), 7422.0
+[CLEANUP], MinLatency(us), 7420
+[CLEANUP], MaxLatency(us), 7423
+[CLEANUP], 95thPercentileLatency(us), 7423
+[CLEANUP], 99thPercentileLatency(us), 7423
+[UPDATE], Operations, 496
+[UPDATE], AverageLatency(us), 1068.8971774193549
+[UPDATE], MinLatency(us), 567
+[UPDATE], MaxLatency(us), 6875
+[UPDATE], 95thPercentileLatency(us), 1446
+[UPDATE], 99thPercentileLatency(us), 1852
+[UPDATE], Return=OK, 496

@@ -1,8 +1,8 @@
 FROM mongo
 
-RUN apt-get update && apt-get install -y openjdk-11-jre wget python2 && \
+RUN apt-get update && apt-get install -y openjdk-11-jre wget python2 vim && \
     wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.tar.gz && \
-    tar -xvf apache-maven-3.9.4-bin.tar.gz -C /usr/local && \
+    tar -xvf apache-maven-3.9.4-bin.tar.gz -C ./ && \
     cd /usr/local && \
     ln -s apache-maven-3.9.4 maven && \
     export PATH=/usr/local/maven/bin:$PATH && \
