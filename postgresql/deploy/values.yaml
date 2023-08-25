@@ -1,0 +1,15 @@
+persistence:
+  enabled: false
+postgresql:
+  password: 1wAmNVfScN
+  repmgrPassword: BBpCuAZ0jo
+  image:
+    tag: 12.4.0-debian-10-r90
+  # extendedConf:
+  #   /home/sl955/proj/hypermnesia_eval/postgresql/postgresql.conf
+pgpool:
+  adminPassword: Wc7YG2QJXE
+# witness:
+#   pgHbaConfiguration: /home/sl955/proj/hypermnesia_eval/postgresql/pg_hba.conf
+
+  

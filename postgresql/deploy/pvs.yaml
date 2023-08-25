@@ -1,0 +1,123 @@
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-0
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-1
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-2
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-3
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-4
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-5
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      labels:
+        type: data
+      name: postgres-db-volume-6
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      capacity:
+        storage: 10G
+      hostPath:
+        path: /var/lib/postgresql/data
+        type: ""
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: default
+      volumeMode: Filesystem
+kind: List
+---
