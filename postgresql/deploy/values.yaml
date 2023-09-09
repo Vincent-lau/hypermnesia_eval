@@ -5,6 +5,17 @@ postgresql:
   repmgrPassword: BBpCuAZ0jo
   image:
     tag: 12.4.0-debian-10-r90
+  replicaCount: 3
+  # initdbScripts: 
+  #   "init.sql"
+  # extraVolumes:
+  #   - name: initscripts
+  #     hostPath:
+  #       path: /home/sl955/proj/hypermnesia_eval/postgresql/init-scripts/init.sql
+  #       type: Directory
+  # extraVolumeMounts:
+  #   - name: initscripts
+  #     mountPath: /docker-entrypoint-initdb.d
   # extendedConf:
   #   /home/sl955/proj/hypermnesia_eval/postgresql/postgresql.conf
 pgpool:

@@ -1,5 +1,7 @@
 FROM postgres
 
+COPY ./init-scripts/init.sql /docker-entrypoint-initdb.d/init.sql
+
 RUN apt-get update && apt-get install -y git openjdk-17-jdk wget vim build-essential libsqlite3-dev zlib1g-dev libncurses5-dev libgdbm-dev libssl-dev libdb-dev && \
     wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.tar.gz && \
     tar -xvf apache-maven-3.9.4-bin.tar.gz -C ./ && \

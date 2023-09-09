@@ -9,6 +9,6 @@ spec:
     command:
       - sleep
       - "36000"
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     name: mnesia-sh
   restartPolicy: Always

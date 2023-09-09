@@ -131,7 +131,7 @@ def render_cluster_config(replicas: int):
         out_file.write(content)
 
 
-def remove(wait_time=5):
+def remove(wait_time=20):
     os.system('kubectl delete -f deploy/erl-cluster.yaml --ignore-not-found')
     sleep(wait_time, 'cluster to be deleted')
 
@@ -145,7 +145,6 @@ def print_nodes(log_file: str):
             cnt += 1
             with open(log_file, "a") as outfile:
                 outfile.write(f"{p.metadata.name}\n")
-    cnt -= 1 # remove enterprise operator
     with open(log_file, "a") as outfile:
         print(f"Total nodes: {cnt}")
         outfile.write(f"Total nodes: {cnt}\n\n")
@@ -213,7 +212,7 @@ def run(args):
 
     # need to deploy the cluster now
     remove()
-    deploy_cluster(360)
+    deploy_cluster(180)
     print_nodes(args.log)
 
     # then copy in bench.sh and bench0.config
@@ -238,38 +237,39 @@ def main():
                             'workload', 'activity', 'nodes', 'generators', 'subscribers'],
                         required=True)
     parser.add_argument('-v', '--benchmark-value', help='value for benchmark',
-                        nargs='+', type=int, required=True)
+                        nargs='+', type=float, required=True)
     parser.add_argument('-n', '--times', type=int,
                         default=1, help='number of times to run')
     args = parser.parse_args()
 
     os.system('kubectl config set-context --current --namespace=hypermnesia')
 
-    if args.benchmark == 'workload':
-        for i in range(args.benchmark_value[0], args.benchmark_value[1]):
-            render_cluster_config(replicas=i)
-            render_bench_config(Benchmark.WORKLOAD, i * 0.1)
-            run(args)
-    elif args.benchmark == 'nodes':
-        for i in args.benchmark_value:
-            render_cluster_config(replicas=i)
-            render_bench_config(Benchmark.NODES, i, 1)
-            run(args)
-    elif args.benchmark == 'generators':
-        for i in range(args.benchmark_value[0], args.benchmark_value[1]):
-            render_cluster_config(replicas=i)
-            render_bench_config(Benchmark.NODES, 3, i)
-            run(args)
-    elif args.benchmark == 'subscribers':
-        for i in range(args.benchmark_value[0], args.benchmark_value[1], 1000):
-            render_cluster_config(replicas=i)
-            render_bench_config(Benchmark.SUBSCRIBERS, i)
-            run(args)
-    elif args.benchmark == 'activity':
-        for i in range(args.benchmark_value[0], args.benchmark_value[1]):
-            render_cluster_config(replicas=i)
-            render_bench_config(Benchmark.ACTIVITY, i)
-            run(args)
+    for _ in range(args.times):
+        if args.benchmark == 'workload':
+            for i in args.benchmark_value:
+                render_cluster_config(replicas=3)
+                render_bench_config(Benchmark.WORKLOAD, i)
+                run(args)
+        elif args.benchmark == 'nodes':
+            for i in args.benchmark_value:
+                render_cluster_config(replicas=i)
+                render_bench_config(Benchmark.NODES, i, 1)
+                run(args)
+        elif args.benchmark == 'generators':
+            for i in range(args.benchmark_value[0], args.benchmark_value[1]):
+                render_cluster_config(replicas=i)
+                render_bench_config(Benchmark.NODES, 3, i)
+                run(args)
+        elif args.benchmark == 'subscribers':
+            for i in range(args.benchmark_value[0], args.benchmark_value[1], 1000):
+                render_cluster_config(replicas=i)
+                render_bench_config(Benchmark.SUBSCRIBERS, i)
+                run(args)
+        elif args.benchmark == 'activity':
+            for i in range(args.benchmark_value[0], args.benchmark_value[1]):
+                render_cluster_config(replicas=i)
+                render_bench_config(Benchmark.ACTIVITY, i)
+                run(args)
 
 
 if __name__ == "__main__":

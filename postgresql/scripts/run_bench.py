@@ -64,6 +64,9 @@ def copyin():
     os.system('kubectl cp postgrenosql.properties postgres-sh:YCSB/postgrenosql/conf/postgrenosql.properties')
     os.system('kubectl cp workloads postgres-sh:YCSB/')
 
+def load():
+    os.system(f'kubectl exec -it postgre-sh -it -- bash -c \'cd /YCSB && ./bin/ycsb load postgrenosql -s -P workloads/workloada -P postgrenosql/conf/postgrenosql.properties  > outputLoad.txt 2>&1\'')
+
 def run(args, cmd: str):
     os.system(
         f'kubectl exec -it postgres-sh -it -- bash -c \'cd /YCSB && {cmd}\'')
@@ -101,6 +104,7 @@ def main():
         render_postgres(m)
         if args.benchmark == 'replicas':
             deploy()
+            load()
         copyin()
         print_nodes(args.logs)
         for _ in range(args.times):
